@@ -1,11 +1,13 @@
 package game2048;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Formatter;
 import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Lewis Won
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -114,12 +116,58 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
 
+        int size = board.size();
+        this.board.setViewingPerspective(side);
+
+        //Manipulate column by column
+        for (int i=0; i<size; i++){
+            //For recording whether tile has been merged. 0 if no, 1 if yes.
+            ArrayList changedTileInColumn = new ArrayList<>(Collections.nCopies(size, 0));
+            //Begin at second row, and progressively look at tiles below
+            for (int j=size-2; j>=0; j--){
+                //Return true if any tile has been moved
+                boolean moveResult = rowColumnMove(this.board, changedTileInColumn, i, j);
+                if (moveResult) changed = true;
+            }
+        }
+
+        this.board.setViewingPerspective(Side.NORTH);
+
         checkGameOver();
         if (changed) {
             setChanged();
         }
         return changed;
     }
+
+    public boolean rowColumnMove(Board b, ArrayList<Integer> changedTileColumn, int i, int j){
+        int size = b.size();
+        //The tile we are looking at is thisTile
+        Tile thisTile = b.tile(i,j);
+        if (thisTile!=null){
+            //Progressively look at tiles above thisTile, i.e. aboveTile
+            for (int k = j+1; k < size; k++){
+                Tile aboveTile = b.tile(i,k);
+                if (aboveTile != null) {
+                    if (changedTileColumn.get(k) == 0 && aboveTile.value() == thisTile.value()){
+                        this.score += thisTile.value() * 2;
+                        changedTileColumn.set(k, 1);
+                        b.move(i,k,thisTile);
+                        return true;
+                    } else if (k-1 != j && b.tile(i,k-1) == null) {
+                        b.move(i,k-1, thisTile);
+                        return true;
+                    }
+                }
+            }
+            if (b.tile(i,size-1) == null){
+                b.move(i,size-1, thisTile);
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     /** Checks if the game is over and sets the gameOver variable
      *  appropriately.
@@ -137,7 +185,16 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
+
         // TODO: Fill in this function.
+        int size = b.size();
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                if (b.tile(i,j) == null){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -148,6 +205,14 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        int size = b.size();
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                if (b.tile(i,j) != null && b.tile(i,j).value() == MAX_PIECE){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -159,6 +224,68 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        if (emptySpaceExists(b) == true) return true;
+        return consecutiveSameValueExists(b);
+    }
+
+    private static boolean consecutiveSameValueExists(Board b) {
+
+        int size = b.size();
+        //TODO: Fill in this function.
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                if (testNorthTileIsSameValue(b, i, j)) return true;
+                if (testSouthTileIsSameValue(b, i, j)) return true;
+                if (testEastTileIsSameValue(b, i, j)) return true;
+                if (testWestTileIsSameValue(b, i, j)) return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean testNorthTileIsSameValue(Board b, int i, int j) {
+        int size = b.size();
+        int thisTileValue = b.tile(i,j).value();
+        if (i < size - 1){
+            int northTileValue = b.tile(i+1,j).value();
+            if (thisTileValue == northTileValue){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean testSouthTileIsSameValue(Board b, int i, int j) {
+        int thisTileValue = b.tile(i,j).value();
+        if (i >0){
+            int southTileValue = b.tile(i-1,j).value();
+            if (thisTileValue == southTileValue){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean testEastTileIsSameValue(Board b, int i, int j) {
+        int thisTileValue = b.tile(i,j).value();
+        if (j >0){
+            int eastTileValue = b.tile(i,j-1).value();
+            if (thisTileValue == eastTileValue){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean testWestTileIsSameValue(Board b, int i, int j) {
+        int size = b.size();
+        int thisTileValue = b.tile(i,j).value();
+        if (j < size - 1){
+            int westTileValue = b.tile(i,j+1).value();
+            if (thisTileValue == westTileValue){
+                return true;
+            }
+        }
         return false;
     }
 
