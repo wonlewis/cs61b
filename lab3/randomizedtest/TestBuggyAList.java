@@ -52,11 +52,9 @@ public class TestBuggyAList {
                 int randVal = StdRandom.uniform(0, 100);
                 L.addLast(randVal);
                 M.addLast(randVal);
-                System.out.println("addLast(" + randVal + ")");
             } else if (operationNumber == 1) {
                 // size
                 int size = L.size();
-                System.out.println("size: " + size);
             } else if (operationNumber == 2) {
                 // removeLast
                 if (L.size() > 0){
@@ -64,7 +62,6 @@ public class TestBuggyAList {
                     Integer mGetLast = M.getLast();
                     assertEquals(L.getLast(), M.getLast());
                     assertEquals(L.removeLast(), M.removeLast());
-                    System.out.println("removeLast(" + lGetLast + mGetLast+ ")");
                 }
             }
         }
