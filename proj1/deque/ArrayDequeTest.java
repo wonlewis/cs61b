@@ -126,4 +126,11 @@ public class ArrayDequeTest {
 
     }
 
+    @Test
+    public void addGet() {
+        ArrayDeque<Integer> lld1 = new ArrayDeque<>();
+        lld1.addFirst(0);
+        assertEquals((Integer) 0, lld1.get(0));
+    }
+
 }
