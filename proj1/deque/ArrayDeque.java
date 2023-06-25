@@ -115,7 +115,7 @@ public class ArrayDeque<T> {
 
     public T get(int index){
         if (index < nextFirst - firstElement){
-            return items[index];
+            return items[index - nextFirst];
         }
         return items[lastElement - (index - (nextFirst - firstElement))];
     }
