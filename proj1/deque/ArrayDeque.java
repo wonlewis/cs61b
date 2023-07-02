@@ -129,9 +129,10 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     public boolean equals(Object o){
         if (!(o instanceof ArrayDeque)) return false;
-        if (!(((ArrayDeque<?>) o).size() != size())) return false;
+        ArrayDeque<T> oAsArrayDeque = (ArrayDeque<T>) o;
+        if (oAsArrayDeque.size() == size()) return false;
         Iterator<T> original = this.iterator();
-        Iterator<T> oObject = (Iterator<T>) ((ArrayDeque<?>) o).iterator();
+        Iterator<T> oObject = oAsArrayDeque.iterator();
         while (oObject.hasNext()){
             if (oObject.next() != original.next()) return false;
         }
