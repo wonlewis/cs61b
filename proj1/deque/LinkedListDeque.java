@@ -1,6 +1,6 @@
 package deque;
 
-public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
+public class LinkedListDeque<T> implements Deque<T> {
 
     private IntNode sentinel;
 
@@ -12,6 +12,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         sentinel.previous = sentinel;
         size = 0;
     }
+
 
     private class IntNode{
         private T thisItem;
@@ -114,7 +115,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     public boolean equals(Object o){
         if (!(o instanceof LinkedListDeque)) return false;
         LinkedListDeque<T> oAsLinkedListDeque = (LinkedListDeque<T>) o;
-        if (!(oAsLinkedListDeque.size() != size())) return false;
+        if (!(oAsLinkedListDeque.size() == size())) return false;
         Iterator<T> original = this.iterator();
         Iterator<T> oObject = oAsLinkedListDeque.iterator();
         while (oObject.hasNext()){
