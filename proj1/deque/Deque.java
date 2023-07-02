@@ -1,5 +1,7 @@
 package deque;
 
+import java.util.Iterator;
+
 interface Deque<T> extends Iterable<T> {
     void addFirst(T item);
     void addLast(T item);
