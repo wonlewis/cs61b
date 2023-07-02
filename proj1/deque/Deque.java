@@ -13,5 +13,7 @@ interface Deque<T> extends Iterable<T> {
         return size()==0;
     }
 
+    Iterator<T> iterator();
+
 
 }
