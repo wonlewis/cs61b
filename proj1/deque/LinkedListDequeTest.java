@@ -142,4 +142,11 @@ public class LinkedListDequeTest {
 
         assertTrue(lld1.equals(lld2));
     }
+
+    @Test
+    public void isEmptyTest(){
+
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+        assertTrue(lld1.isEmpty());
+    }
 }

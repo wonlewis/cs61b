@@ -124,7 +124,6 @@ public class ArrayDeque<T> implements Deque<T> {
         return items[lastElement - (index - (nextFirst - firstElement))];
     }
 
-    @Override
     public Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }
