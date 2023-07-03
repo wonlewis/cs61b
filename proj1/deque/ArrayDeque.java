@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Iterable<T> {
     private T[] items;
     private int size;
     private int nextFirst;
@@ -37,7 +37,6 @@ public class ArrayDeque<T> implements Deque<T> {
         items = a;
     }
 
-    @Override
     public void addFirst(T item){
         if (size == items.length){
             resize(size * RFACTOR);
@@ -47,7 +46,6 @@ public class ArrayDeque<T> implements Deque<T> {
         nextFirst++;
     }
 
-    @Override
     public void addLast(T item){
         if (size == items.length){
             resize(size * RFACTOR);
@@ -57,12 +55,10 @@ public class ArrayDeque<T> implements Deque<T> {
         nextLast--;
     }
 
-    @Override
     public int size(){
         return size;
     }
 
-    @Override
     public void printDeque(){
         for (int i = nextFirst - 1; i >= firstElement; i--){
             System.out.println(items[i] + " ");
@@ -73,7 +69,6 @@ public class ArrayDeque<T> implements Deque<T> {
         System.out.println();
     }
 
-    @Override
     public T removeFirst(){
         T result;
         if (size == 0) return null;
@@ -95,7 +90,6 @@ public class ArrayDeque<T> implements Deque<T> {
         return result;
     }
 
-    @Override
     public T removeLast(){
         T result;
         if (size == 0) return null;
@@ -116,12 +110,15 @@ public class ArrayDeque<T> implements Deque<T> {
         return result;
     }
 
-    @Override
     public T get(int index){
         if (index < nextFirst - firstElement){
             return items[nextFirst - index - 1];
         }
         return items[lastElement - (index - (nextFirst - firstElement))];
+    }
+
+    public boolean isEmpty(){
+        return size()==0;
     }
 
     @Override

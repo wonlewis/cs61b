@@ -14,7 +14,7 @@ public class LinkedListDequeTest {
      * && is the "and" operation. */
     public void addIsEmptySizeTest() {
 
-        Deque<String> lld1 = new LinkedListDeque<String>();
+        LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
 
 		assertTrue("A newly initialized LLDeque should be empty", lld1.isEmpty());
 		lld1.addFirst("front");
@@ -39,7 +39,7 @@ public class LinkedListDequeTest {
     /** Adds an item, then removes an item, and ensures that dll is empty afterwards. */
     public void addRemoveTest() {
 
-        Deque<Integer> lld1 = new LinkedListDeque<Integer>();
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
 		// should be empty
 		assertTrue("lld1 should be empty upon initialization", lld1.isEmpty());
 
@@ -58,7 +58,7 @@ public class LinkedListDequeTest {
     public void removeEmptyTest() {
 
 
-        Deque<Integer> lld1 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
         lld1.addFirst(3);
 
         lld1.removeLast();
@@ -79,9 +79,9 @@ public class LinkedListDequeTest {
     /* Check if you can create LinkedListDeques with different parameterized types*/
     public void multipleParamTest() {
 
-        Deque<String>  lld1 = new LinkedListDeque<String>();
-        Deque<Double>  lld2 = new LinkedListDeque<Double>();
-        Deque<Boolean> lld3 = new LinkedListDeque<Boolean>();
+        LinkedListDeque<String>  lld1 = new LinkedListDeque<String>();
+        LinkedListDeque<Double>  lld2 = new LinkedListDeque<Double>();
+        LinkedListDeque<Boolean> lld3 = new LinkedListDeque<Boolean>();
 
         lld1.addFirst("string");
         lld2.addFirst(3.14159);
@@ -97,7 +97,7 @@ public class LinkedListDequeTest {
     /* check if null is return when removing from an empty LinkedListDeque. */
     public void emptyNullReturnTest() {
 
-        Deque<Integer> lld1 = new LinkedListDeque<Integer>();
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
 
         boolean passed1 = false;
         boolean passed2 = false;
@@ -109,7 +109,7 @@ public class LinkedListDequeTest {
     /* Add large number of elements to deque; check if order is correct. */
     public void bigLLDequeTest() {
 
-        Deque<Integer> lld1 = new LinkedListDeque<Integer>();
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
         for (int i = 0; i < 1000000; i++) {
             lld1.addLast(i);
         }
@@ -129,8 +129,8 @@ public class LinkedListDequeTest {
     @Test
     public void testIterable() {
 
-        Deque<Integer> lld1 = new LinkedListDeque<>();
-        Deque<Integer> lld2 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> lld2 = new LinkedListDeque<>();
 
         lld1.addFirst(1);
         lld1.addFirst(2);
@@ -146,7 +146,7 @@ public class LinkedListDequeTest {
     @Test
     public void isEmptyTest(){
 
-        Deque<Integer> lld1 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
         assertTrue(lld1.isEmpty());
     }
 }
