@@ -138,4 +138,11 @@ public class ArrayDequeTest {
 
     }
 
+    @Test
+    public void isEmptyTest(){
+
+        Deque<Integer> lld1 = new ArrayDeque<>();
+        assertTrue(lld1.isEmpty());
+    }
+
 }
