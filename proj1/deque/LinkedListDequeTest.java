@@ -1,6 +1,9 @@
 package deque;
 
 import org.junit.Test;
+
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 
@@ -125,6 +128,26 @@ public class LinkedListDequeTest {
 
     }
 
+    @Test
+    /* Add large number of elements to deque; check if order is correct. */
+    public void bigLLDequeReverseTest() {
+
+        Deque<Integer> lld1 = new LinkedListDeque<Integer>();
+        for (int i = 0; i < 1000000; i++) {
+            lld1.addFirst(i);
+        }
+
+        for (double i = 0; i < 500000; i++) {
+            assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
+        }
+
+        for (double i = 999999; i > 500000; i--) {
+            assertEquals("Should have the same value", i, (double) lld1.removeFirst(), 0.0);
+        }
+
+
+    }
+
 
     @Test
     public void testIterable() {
@@ -148,5 +171,36 @@ public class LinkedListDequeTest {
 
         Deque<Integer> lld1 = new LinkedListDeque<>();
         assertTrue(lld1.isEmpty());
+    }
+
+    @Test
+    public void addFirstRemoveLastIsEmpty(){
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+        lld1.addFirst(1);
+        int removeLastThis = lld1.removeLast();
+        assertEquals(1, removeLastThis);
+    }
+
+    @Test
+    public void iterativeGetTest(){
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+        lld1.addLast(0);
+        lld1.addLast(1);
+        assertEquals(1,(int) lld1.get(1));
+        assertEquals(1,(int) lld1.removeLast());
+        assertEquals(0, (int) lld1.get(0));
+
+    }
+
+    @Test
+    public void recursiveGetTest(){
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+        lld1.addLast(0);
+        assertEquals(0,(int) lld1.removeLast());
+        lld1.addLast(2);
+        lld1.addFirst(3);
+        lld1.addLast(4);
+        assertEquals(4, (int) lld1.getRecursive(2));
+
     }
 }

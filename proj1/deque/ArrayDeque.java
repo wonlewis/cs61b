@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] items;
     private int size;
     private int nextFirst;
@@ -23,7 +23,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     private void resize(int capacity){
         T[] a = (T []) new Object[capacity];
-        for (int i = 0; i < nextFirst; i++){
+        for (int i = 0; i < nextFirst-firstElement; i++){
             a[i] = items[firstElement+i];
         }
         int counter = 1;
@@ -32,6 +32,7 @@ public class ArrayDeque<T> implements Deque<T> {
             counter++;
         }
         nextLast = a.length - counter;
+        nextFirst = nextFirst-firstElement;
         firstElement = 0;
         lastElement = a.length - 1;
         items = a;

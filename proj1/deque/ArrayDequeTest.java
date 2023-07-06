@@ -2,6 +2,8 @@ package deque;
 
 import org.junit.Test;
 
+import java.awt.datatransfer.FlavorListener;
+
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
@@ -127,6 +129,25 @@ public class ArrayDequeTest {
     }
 
     @Test
+    /* Add large number of elements to deque; check if order is correct. */
+    public void bigLLDequeReverseTest() {
+
+        Deque<Integer> lld1 = new ArrayDeque<Integer>();
+        for (int i = 0; i < 100; i++) {
+            lld1.addFirst(i);
+        }
+
+        for (double i = 0; i < 50; i++) {
+            assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
+        }
+
+        for (double i = 99; i > 50; i--) {
+            assertEquals("Should have the same value", i, (double) lld1.removeFirst(), 0.0);
+        }
+
+    }
+
+    @Test
     public void addGet() {
         Deque<Integer> lld1 = new ArrayDeque<>();
         lld1.addFirst(1);
@@ -136,6 +157,32 @@ public class ArrayDequeTest {
         assertEquals((Integer) 1, lld1.get(1));
         assertEquals((Integer) 2, lld1.get(2));
 
+    }
+
+    @Test
+    public void addGetMore() {
+        Deque<Integer> lld1 = new ArrayDeque<>();
+        lld1.addFirst(0);
+        lld1.addFirst(1);
+        assertEquals(0, (int) lld1.get(1));
+        lld1.removeLast();
+        lld1.addLast(4);
+        lld1.addFirst(5);
+        lld1.addLast(6);
+        assertEquals(5,(int) lld1.get(0));
+        lld1.removeFirst();
+        lld1.addLast(9);
+        assertEquals(6, (int) lld1.get(2));
+        lld1.removeLast();
+        lld1.addFirst(12);
+        lld1.addLast(13);
+        assertEquals(12, (int) lld1.removeFirst());
+        lld1.addLast(15);
+        lld1.addFirst(16);
+        lld1.addLast(17);
+        lld1.addLast(18);
+        lld1.addLast(19);
+        assertEquals(17,(int) lld1.removeFirst());
     }
 
     @Test
