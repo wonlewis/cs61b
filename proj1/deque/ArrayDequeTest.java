@@ -203,14 +203,27 @@ public class ArrayDequeTest {
 
     @Test
     public void testEqualItself() {
-
         Deque<Integer> lld1 = new ArrayDeque<>();
-
         lld1.addFirst(1);
         lld1.addFirst(2);
         lld1.addFirst(3);
-
         assertTrue(lld1.equals(lld1));
+    }
+
+    @Test
+    public void addRemoveEmpty() {
+        Deque<Integer> lld1 = new ArrayDeque<>();
+        lld1.addFirst(0);
+        assertFalse(lld1.isEmpty());
+        lld1.addFirst(2);
+        lld1.addFirst(3);
+        lld1.addFirst(4);
+        lld1.addFirst(5);
+        lld1.addFirst(6);
+        lld1.addFirst(7);
+        lld1.addFirst(8);
+        assertEquals(0,(int) lld1.removeLast());
+        lld1.addFirst(10);
     }
 
 }

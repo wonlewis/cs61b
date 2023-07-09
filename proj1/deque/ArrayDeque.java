@@ -43,7 +43,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (size == items.length) {
             resize(size * RFACTOR);
         }
-        if (nextFirst == nextLast) {
+        if (nextFirst >= nextLast) {
             resize(items.length);
         }
         items[nextFirst] = item;
@@ -56,7 +56,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (size == items.length) {
             resize(size * RFACTOR);
         }
-        if (nextFirst == nextLast) {
+        if (nextFirst >= nextLast) {
             resize(items.length);
         }
         items[nextLast] = item;
