@@ -88,7 +88,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (capacityPercentage < 0.25 && items.length / 2 > 8) {
             resize(items.length / 2);
         }
-        if (nextFirst - firstElement == 0) {
+        if (nextFirst == firstElement) {
             result = items[lastElement];
             items[lastElement] = null;
             lastElement--;
@@ -110,7 +110,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (capacityPercentage < 0.25 && items.length / 2 > 8) {
             resize(items.length / 2);
         }
-        if (nextLast == items.length - 1) {
+        if (nextLast == lastElement) {
             result = items[firstElement];
             items[firstElement] = null;
             firstElement++;

@@ -226,4 +226,29 @@ public class ArrayDequeTest {
         lld1.addFirst(10);
     }
 
+    @Test
+    public void addRemoveTest2() {
+        Deque<Integer> lld1 = new ArrayDeque<>();
+        lld1.addLast(0);
+        lld1.addFirst(1);
+        assertEquals(1, (int) lld1.get(0));
+        lld1.removeFirst();
+        lld1.removeFirst();
+        lld1.addLast(5);
+        lld1.removeFirst();
+        lld1.addFirst(7);
+        lld1.removeFirst();
+        lld1.addFirst(9);
+        lld1.get(0);
+        lld1.get(0);
+        lld1.get(0);
+        lld1.addFirst(13);
+        lld1.removeFirst();
+        lld1.addFirst(15);
+        lld1.addFirst(16);
+        lld1.addFirst(17);
+        lld1.get(2);
+        assertEquals(9, (int) lld1.removeLast());
+    }
+
 }
