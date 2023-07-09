@@ -44,7 +44,7 @@ public class ArrayDeque<T> implements Deque<T> {
             resize(size * RFACTOR);
         }
         if (nextFirst == nextLast){
-            resize(size);
+            resize(items.length);
         }
         items[nextFirst] = item;
         size++;

@@ -11,6 +11,8 @@ public interface Deque<T> extends Iterable<T> {
     T removeLast();
     T get(int index);
     boolean equals(Object o);
+    @Override
+    Iterator<T> iterator();
 
     default boolean isEmpty(){
         return size()==0;
