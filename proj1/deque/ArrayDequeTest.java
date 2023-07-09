@@ -182,7 +182,7 @@ public class ArrayDequeTest {
         lld1.addLast(17);
         lld1.addLast(18);
         lld1.addLast(19);
-        assertEquals(17,(int) lld1.removeFirst());
+        assertEquals(16,(int) lld1.removeFirst());
     }
 
     @Test

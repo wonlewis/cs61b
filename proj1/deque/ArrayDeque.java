@@ -43,6 +43,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (size == items.length){
             resize(size * RFACTOR);
         }
+        if (nextFirst == nextLast){
+            resize(size);
+        }
         items[nextFirst] = item;
         size++;
         nextFirst++;
@@ -52,6 +55,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     public void addLast(T item){
         if (size == items.length){
             resize(size * RFACTOR);
+        }
+        if (nextFirst == nextLast){
+            resize(items.length);
         }
         items[nextLast] = item;
         size++;
@@ -125,16 +131,18 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return items[lastElement - (index - (nextFirst - firstElement))];
     }
 
+    @Override
     public Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }
 
+    @Override
     public boolean equals(Object o){
-        if (!(o instanceof ArrayDeque)) return false;
-        ArrayDeque<T> oAsArrayDeque = (ArrayDeque<T>) o;
-        if (oAsArrayDeque.size() == size()) return false;
+        if (!(o instanceof Deque)) return false;
+        Deque<T> oAsDeque = (Deque<T>) o;
+        if (oAsDeque.size() == size()) return false;
         Iterator<T> original = this.iterator();
-        Iterator<T> oObject = oAsArrayDeque.iterator();
+        Iterator<T> oObject = oAsDeque.iterator();
         while (oObject.hasNext()){
             if (oObject.next() != original.next()) return false;
         }
@@ -156,7 +164,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public T next() {
-            T returnItem = items[thisIndex];
+            T returnItem = get(thisIndex);
             thisIndex++;
             return returnItem;
         }

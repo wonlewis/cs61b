@@ -153,7 +153,7 @@ public class LinkedListDequeTest {
     public void testIterable() {
 
         Deque<Integer> lld1 = new LinkedListDeque<>();
-        Deque<Integer> lld2 = new LinkedListDeque<>();
+        Deque<Integer> lld2 = new ArrayDeque<>();
 
         lld1.addFirst(1);
         lld1.addFirst(2);
