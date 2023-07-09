@@ -10,6 +10,8 @@ import static org.junit.Assert.*;
 public class MaxArrayDequeTest {
 
     Comparator<String> byLength = Comparator.comparing(String::length);
+    Comparator<Integer> byValue = Comparator.comparing(Integer::valueOf);
+
 
     @Test
     @DisplayName("Test for longest string")
@@ -22,6 +24,20 @@ public class MaxArrayDequeTest {
         lld1.addFirst("hell");
         lld1.addFirst("hello");
         assertEquals("hello",lld1.max());
+    }
+
+    @Test
+    @DisplayName("Test for highest value")
+    public void valueTest() {
+
+        MaxArrayDeque<Integer> lld1 = new MaxArrayDeque<>(byValue);
+        lld1.addFirst(1);
+        lld1.addFirst(2);
+        lld1.addFirst(3);
+        lld1.addFirst(4);
+        lld1.addFirst(5);
+        lld1.addFirst(5);
+        assertEquals(5,(int) lld1.max());
     }
 
 }

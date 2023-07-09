@@ -167,6 +167,18 @@ public class LinkedListDequeTest {
     }
 
     @Test
+    public void testEqualItself() {
+
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+
+        lld1.addFirst(1);
+        lld1.addFirst(2);
+        lld1.addFirst(3);
+
+        assertTrue(lld1.equals(lld1));
+    }
+
+    @Test
     public void isEmptyTest(){
 
         Deque<Integer> lld1 = new LinkedListDeque<>();
