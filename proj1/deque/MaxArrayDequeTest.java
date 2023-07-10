@@ -18,12 +18,15 @@ public class MaxArrayDequeTest {
     public void stringLengthTest() {
 
         MaxArrayDeque<String> lld1 = new MaxArrayDeque<>(byLength);
+        lld1.addFirst("hello");
+        lld1.removeFirst();
         lld1.addFirst("h");
         lld1.addFirst("he");
         lld1.addFirst("hel");
         lld1.addFirst("hell");
         lld1.addFirst("hello");
-        assertEquals("hello",lld1.max());
+        lld1.removeFirst();
+        assertEquals("hell",lld1.max());
     }
 
     @Test
@@ -31,6 +34,7 @@ public class MaxArrayDequeTest {
     public void valueTest() {
 
         MaxArrayDeque<Integer> lld1 = new MaxArrayDeque<>(byValue);
+        lld1.addFirst(5);
         lld1.addFirst(1);
         lld1.addFirst(2);
         lld1.addFirst(3);

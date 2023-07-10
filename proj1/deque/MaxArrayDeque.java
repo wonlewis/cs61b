@@ -13,17 +13,17 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
     private Comparator<T> comparator;
 
     public MaxArrayDeque(Comparator<T> c) {
-        items = (T []) new Object[8];
-        size = 0;
-        nextFirst = 0;
-        firstElement = 0;
-        nextLast = items.length - 1;
-        lastElement = items.length - 1;
-        comparator = c;
+        this.items = (T []) new Object[8];
+        this.size = 0;
+        this.nextFirst = 0;
+        this.firstElement = 0;
+        this.nextLast = items.length - 1;
+        this.lastElement = items.length - 1;
+        this.comparator = c;
     }
 
     public T max() {
-        return getT(comparator);
+        return getT(this.comparator);
     }
 
     public T max(Comparator<T> c) {
