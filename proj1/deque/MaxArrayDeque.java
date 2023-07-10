@@ -38,7 +38,7 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
                 if (maxT == null || c.compare(super.get(i), maxT) == 1) { maxT = super.get(i); }
             }
             if (c.compare(super.get(i), super.get(i+1)) == -1) {
-                if (maxT == null || c.compare(super.get(i + 1), maxT) == 1) { maxT = super.get(i); }
+                if (maxT == null || c.compare(super.get(i + 1), maxT) == 1) { maxT = super.get(i + 1); }
             }
         }
         return maxT;
