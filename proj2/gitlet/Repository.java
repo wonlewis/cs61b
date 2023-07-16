@@ -9,7 +9,7 @@ import static gitlet.Utils.*;
  *  TODO: It's a good idea to give a description here of what else this Class
  *  does at a high level.
  *
- *  @author TODO
+ *  @author Lewis Won
  */
 public class Repository {
     /**
@@ -26,4 +26,20 @@ public class Repository {
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
     /* TODO: fill in the rest of this class. */
+    static void checkForInitializedGitletWorkingDirectory(String msg) {
+        if (GITLET_DIR.exists() && msg != "init") {
+            System.out.println("Not in an initialized Gitlet directory.");
+        }
+    }
+
+    public static void initCommand() {
+        if (GITLET_DIR.exists()) {
+            errorWithoutExit("A Gitlet version-control system already exists in the current directory.");
+            return;
+        }
+        GITLET_DIR.mkdir();
+        Commit initialCommit = new Commit();
+        File initialCommitFile = join(GITLET_DIR, "initialCommit");
+        writeObject(initialCommitFile, initialCommit);
+    }
 }

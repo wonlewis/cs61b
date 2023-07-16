@@ -1,5 +1,6 @@
 package gitlet;
 
+import java.awt.*;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,6 +31,7 @@ class Utils {
 
     /** The length of a complete SHA-1 UID as a hexadecimal numeral. */
     static final int UID_LENGTH = 40;
+    static final List<String> VALID_COMMANDS = Arrays.asList("init", "add", "commit", "rm", "log", "global-log", "find", "status", "checkout", "branch", "rm-branch", "reset", "merge");
 
     /* SHA-1 HASH VALUES. */
 
@@ -236,4 +238,24 @@ class Utils {
         System.out.printf(msg, args);
         System.out.println();
     }
+
+    static void errorWithoutExit(String msg) {
+        if (msg != null && !msg.equals("")) {
+            System.out.println(msg);
+        }
+    }
+
+    static void errorWithExit(String msg) {
+        if (msg != null && !msg.equals("")) {
+            System.out.println(msg);
+        }
+        System.exit(0);
+    }
+
+    static void checkForValidCommand(String msg) {
+        if (!VALID_COMMANDS.contains(msg)) {
+            errorWithExit("No command with that name exists.");
+        }
+    }
+
 }
