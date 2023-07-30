@@ -24,12 +24,17 @@ public class Main {
         switch(firstArg) {
             case "init":
                 validateNumArgs(args, 1);
+                Repository.initCommand();
                 break;
             case "add":
-                // TODO: handle the `add [filename]` command
+                validateNumArgs(args, 2);
+                String fileName = args[1];
+                Repository.add(fileName);
                 break;
-            // TODO: FILL THE REST IN
             case "commit":
+                validateNumArgsForCommit(args);
+                String message = args[1];
+                Repository.commit(message);
                 break;
             case "rm":
                 // TODO: handle the `rm` command
@@ -67,13 +72,22 @@ public class Main {
     /**
      * Checks the number of arguments versus the expected number,
      * throws a RuntimeException if they do not match.
-     *
-     * @param cmd Name of command you are validating
      * @param args Argument array from command line
      * @param n Number of expected arguments
      */
     public static void validateNumArgs(String[] args, int n) {
         if (args.length != n) {
+            throw new RuntimeException(
+                    String.format("Incorrect operands."));
+        }
+    }
+
+    public static void validateNumArgsForCommit(String[] args) {
+        if (args.length == 1) {
+            System.out.println("Please enter a commit message.");
+            System.exit(0);
+        }
+        if (args.length > 2) {
             throw new RuntimeException(
                     String.format("Incorrect operands."));
         }
