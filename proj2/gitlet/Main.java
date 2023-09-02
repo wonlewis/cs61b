@@ -40,7 +40,8 @@ public class Main {
                 // TODO: handle the `rm` command
                 break;
             case "log":
-                // TODO: handle the `log` command
+                validateNumArgs(args, 1);
+                Repository.log();
                 break;
             case "global-log":
                 // TODO: handle the `global-log` command

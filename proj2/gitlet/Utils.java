@@ -1,18 +1,9 @@
 package gitlet;
 
-import java.awt.*;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -226,7 +217,7 @@ class Utils {
 
     /* MESSAGES AND ERROR REPORTING */
 
-    /** Return a GitletException whose message is composed from MSG and ARGS as
+    /** Return a GitletException whose message is composed of MSG and ARGS as
      *  for the String.format method. */
     static GitletException error(String msg, Object... args) {
         return new GitletException(String.format(msg, args));

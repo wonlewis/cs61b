@@ -62,21 +62,9 @@ public class Repository {
         initialCommit.setThisId(initialCommitSha);
         Map<String, Commit> commitTree = new TreeMap<>();
         Map<String, String> commitTreeShortened = new TreeMap<>();
-        Repository.writeToCommitTree(commitTree, commitTreeShortened, initialCommit);
+        RepositoryHelpers.writeToCommitTree(commitTree, commitTreeShortened, initialCommit);
     }
 
-    private static void writeToCommitTree(Map<String, Commit> commitTree, Map<String, String> commitTreeShortened, Commit commitHead) {
-        String commitSha = Utils.sha1(Utils.serialize(commitHead));
-        commitTree.put(commitSha, commitHead);
-        String initialCommitShaPart1 = commitSha.substring(0,1);
-        String initialCommitShaPart2 = commitSha.substring(2, commitSha.length()-1);
-        commitTreeShortened.put(initialCommitShaPart1, initialCommitShaPart2);
-        File commitTreeFile = join(GITLET_DIR, "commitTree");
-        File commitTreeShortenedFile = join(GITLET_DIR, "commitTreeShortened");
-        writeObject(commitTreeFile, (Serializable) commitTree);
-        writeObject(commitTreeShortenedFile, (Serializable) commitTreeShortened);
-        writeObject(COMMIT_HEAD, commitHead);
-    }
 
     public static void add(String fileName) {
         File toAddFile = join(GITLET_DIR, fileName);
@@ -125,12 +113,12 @@ public class Repository {
             File toCommitFile = join(COMMITTED_FILES_DIR, set.getKey(), set.getValue(), set.getKey());
             writeContents(toCommitFile, toCopyContent);
         }
-        commitHead = Repository.setCommitHead(commitHead, message);
+        commitHead = RepositoryHelpers.setCommitHead(commitHead, message);
         File commitTreeFile = join(GITLET_DIR, "commitTree");
         File commitTreeShortenedFile = join(GITLET_DIR, "commitTreeShortened");
         Map<String, Commit> commitTree = readObject(commitTreeFile, TreeMap.class);
         Map<String, String> commitTreeShortened = readObject(commitTreeShortenedFile, TreeMap.class);
-        Repository.writeToCommitTree(commitTree, commitTreeShortened, commitHead);
+        RepositoryHelpers.writeToCommitTree(commitTree, commitTreeShortened, commitHead);
 
         /** clear staging folder */
         Utils.restrictedDelete(STAGING_DIR_MAP);
@@ -144,13 +132,9 @@ public class Repository {
         }
     }
 
-    private static Commit setCommitHead(Commit commitHead, String message) {
-        String commitHeadSha = sha1(commitHead);
-        commitHead.setMessage(message);
-        commitHead.setParentId(commitHead.thisId);
-        commitHead.setThisId(commitHeadSha);
-        commitHead.setTimestamp(new Date());
-        return commitHead;
+    public static void log() {
+
+        /** To handle merge node case **/
     }
 
 
