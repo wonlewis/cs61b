@@ -40,6 +40,9 @@ public class Repository {
     /** Folder of committed files */
     public static final File COMMITTED_FILES_DIR = join(GITLET_DIR, "objects");
 
+    /** Initial commit id **/
+    public static String INITIAL_COMMIT_ID = "0000000000000000000000000000000000000000";
+
     /* TODO: fill in the rest of this class. */
     static void checkForInitializedGitletWorkingDirectory(String msg) {
         if (!GITLET_DIR.exists() && !msg.equals("init")) {
@@ -60,8 +63,8 @@ public class Repository {
         //Includes both the full and shortened sha
         String initialCommitSha = Utils.sha1(Utils.serialize(initialCommit));
         initialCommit.setThisId(initialCommitSha);
-        Map<String, Commit> commitTree = new TreeMap<>();
-        Map<String, String> commitTreeShortened = new TreeMap<>();
+        TreeMap<String, Commit> commitTree = new TreeMap<>();
+        TreeMap<String, String> commitTreeShortened = new TreeMap<>();
         RepositoryHelpers.writeToCommitTree(commitTree, commitTreeShortened, initialCommit);
     }
 
@@ -76,7 +79,7 @@ public class Repository {
         String toAddFileSha = sha1(toAddFileByteArray);
         Commit commitHead = readObject(COMMIT_HEAD, Commit.class);
         File fileInStaging = join(STAGING_DIR, fileName, toAddFileSha, fileName);
-        Map<String, String> toAddFileMap;
+        TreeMap<String, String> toAddFileMap;
         if (STAGING_DIR_MAP.exists()) {
             toAddFileMap = readObject(STAGING_DIR_MAP, TreeMap.class);
         }
@@ -89,14 +92,14 @@ public class Repository {
             byte[] toAddFileRead = readContents(toAddFile);
             writeContents(fileInStaging, toAddFileRead);
             toAddFileMap.put(fileName, toAddFileSha);
-            writeObject(STAGING_DIR_MAP, (Serializable) toAddFileMap);
+            writeObject(STAGING_DIR_MAP, toAddFileMap);
         }
     }
 
     public static void commit(String message) {
         /** read toAddFileMap */
         /** if toAddFileMap is empty, print "No changes added to the commit."  */
-        Map<String, String> toAddFileMap = readObject(STAGING_DIR_MAP, TreeMap.class);
+        TreeMap<String, String> toAddFileMap = readObject(STAGING_DIR_MAP, TreeMap.class);
         if (toAddFileMap.size() == 0 || !STAGING_DIR_MAP.exists()) {
             System.out.println("No changes added to the commit.");
             System.exit(0);
@@ -114,10 +117,8 @@ public class Repository {
             writeContents(toCommitFile, toCopyContent);
         }
         commitHead = RepositoryHelpers.setCommitHead(commitHead, message);
-        File commitTreeFile = join(GITLET_DIR, "commitTree");
-        File commitTreeShortenedFile = join(GITLET_DIR, "commitTreeShortened");
-        Map<String, Commit> commitTree = readObject(commitTreeFile, TreeMap.class);
-        Map<String, String> commitTreeShortened = readObject(commitTreeShortenedFile, TreeMap.class);
+        TreeMap<String, Commit> commitTree = RepositoryHelpers.readCommitTree();
+        TreeMap<String, String> commitTreeShortened = RepositoryHelpers.readCommitTreeShortened();
         RepositoryHelpers.writeToCommitTree(commitTree, commitTreeShortened, commitHead);
 
         /** clear staging folder */
@@ -133,8 +134,13 @@ public class Repository {
     }
 
     public static void log() {
-
-        /** To handle merge node case **/
+        Commit commitHead = RepositoryHelpers.getCommitHead();
+        RepositoryHelpers.printCommitMessage(commitHead);
+        while (commitHead.getParentId() != INITIAL_COMMIT_ID) {
+            commitHead = RepositoryHelpers.getCommitHead(commitHead.getParentId());
+            RepositoryHelpers.printCommitMessage(commitHead);
+        }
+        /** TODO: To handle merge node case **/
     }
 
 

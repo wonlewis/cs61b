@@ -2,25 +2,15 @@ package gitlet;
 
 import java.io.File;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static gitlet.Utils.*;
 
 public class RepositoryHelpers {
-
-    /** The current working directory. */
-    public static final File CWD = new File(System.getProperty("user.dir"));
-    /** The .gitlet directory. */
-    public static final File GITLET_DIR = join(CWD, ".gitlet");
-    /** The current commit. */
-    public static final File COMMIT_HEAD = join(GITLET_DIR, "commit_head");
-    /** Staging folder. */
-    public static final File STAGING_DIR = join(GITLET_DIR, "staging");
-    /** Staging folder commit files */
-    public static final File STAGING_DIR_MAP = join(GITLET_DIR, "staging", "staging_map");
-    /** Folder of committed files */
-    public static final File COMMITTED_FILES_DIR = join(GITLET_DIR, "objects");
 
     protected static void writeToCommitTree(Map<String, Commit> commitTree, Map<String, String> commitTreeShortened, Commit commitHead) {
         String commitSha = Utils.sha1(Utils.serialize(commitHead));
@@ -28,11 +18,11 @@ public class RepositoryHelpers {
         String initialCommitShaPart1 = commitSha.substring(0,1);
         String initialCommitShaPart2 = commitSha.substring(2, commitSha.length()-1);
         commitTreeShortened.put(initialCommitShaPart1, initialCommitShaPart2);
-        File commitTreeFile = join(GITLET_DIR, "commitTree");
-        File commitTreeShortenedFile = join(GITLET_DIR, "commitTreeShortened");
+        File commitTreeFile = join(Repository.GITLET_DIR, "commitTree");
+        File commitTreeShortenedFile = join(Repository.GITLET_DIR, "commitTreeShortened");
         writeObject(commitTreeFile, (Serializable) commitTree);
         writeObject(commitTreeShortenedFile, (Serializable) commitTreeShortened);
-        writeObject(COMMIT_HEAD, commitHead);
+        writeObject(Repository.COMMIT_HEAD, commitHead);
     }
 
     protected static Commit setCommitHead(Commit commitHead, String message) {
@@ -42,5 +32,35 @@ public class RepositoryHelpers {
         commitHead.setThisId(commitHeadSha);
         commitHead.setTimestamp(new Date());
         return commitHead;
+    }
+
+    protected static TreeMap<String, Commit> readCommitTree() {
+        File commitTreeFile = join(Repository.GITLET_DIR, "commitTree");
+        return readObject(commitTreeFile, TreeMap.class);
+    }
+
+    protected static TreeMap<String, String> readCommitTreeShortened() {
+        File commitTreeShortenedFile = join(Repository.GITLET_DIR, "commitTreeShortened");
+        return readObject(commitTreeShortenedFile, TreeMap.class);
+    }
+
+    protected static Commit getCommitHead() {
+        TreeMap<String, Commit> commitTree = readCommitTree();
+        String commitHead = commitTree.lastKey();
+        return commitTree.get(commitHead);
+    }
+
+    protected static Commit getCommitHead(String id) {
+        TreeMap<String, Commit> commitTree = readCommitTree();
+        return commitTree.get(id);
+    }
+
+    protected static void printCommitMessage(Commit commit) {
+        System.out.println("===");
+        SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd HH:mm:ss yyyy Z");
+        String date = sdf.format(commit.getTimestamp());
+        System.out.println("Date: " + date);
+        System.out.println(commit.getMessage());
+        System.out.println();
     }
 }

@@ -35,7 +35,7 @@ public class Commit implements Serializable {
     public Commit() {
         this.message = "initial commit";
         this.timestamp = new Date(0);
-        this.parentId = "0000000000000000000000000000000000000000";
+        this.parentId = Repository.INITIAL_COMMIT_ID;
         this.files = new TreeMap<String, String>();
     }
 
@@ -65,5 +65,9 @@ public class Commit implements Serializable {
         this.thisId = sha1;
     }
 
-    /* TODO: fill in the rest of this class. */
+    public String getParentId() { return this.parentId; }
+
+    public Date getTimestamp() { return this.timestamp; }
+
+    public String getMessage() { return this.message; }
 }
