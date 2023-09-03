@@ -60,6 +60,7 @@ public class RepositoryHelpers {
 
     protected static void printCommitMessage(Commit commit) {
         System.out.println("===");
+        System.out.println("commit " + commit.getThisId());
         SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd HH:mm:ss yyyy Z");
         String date = sdf.format(commit.getTimestamp());
         System.out.println("Date: " + date);
