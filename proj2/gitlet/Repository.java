@@ -1,16 +1,15 @@
 package gitlet;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static gitlet.Utils.*;
-
-// TODO: any imports you need here
 
 /** Represents a gitlet repository.
  *  TODO: It's a good idea to give a description here of what else this Class
@@ -19,13 +18,6 @@ import static gitlet.Utils.*;
  *  @author Lewis Won
  */
 public class Repository {
-    /**
-     * TODO: add instance variables here.
-     *
-     * List all instance variables of the Repository class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided two examples for you.
-     */
 
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
@@ -43,7 +35,6 @@ public class Repository {
     /** Initial commit id **/
     public static String INITIAL_COMMIT_ID = "0000000000000000000000000000000000000000";
 
-    /* TODO: fill in the rest of this class. */
     static void checkForInitializedGitletWorkingDirectory(String msg) {
         if (!GITLET_DIR.exists() && !msg.equals("init")) {
             System.out.println(msg);
@@ -64,7 +55,7 @@ public class Repository {
         String initialCommitSha = Utils.sha1(Utils.serialize(initialCommit));
         initialCommit.setThisId(initialCommitSha);
         TreeMap<String, Commit> commitTree = new TreeMap<>();
-        TreeMap<String, String> commitTreeShortened = new TreeMap<>();
+        TreeMap<String, List<String>> commitTreeShortened = new TreeMap<>();
         RepositoryHelpers.writeToCommitTree(commitTree, commitTreeShortened, initialCommit);
     }
 
@@ -78,13 +69,14 @@ public class Repository {
         byte[] toAddFileByteArray = readContents(toAddFile);
         String toAddFileSha = sha1(toAddFileByteArray);
         Commit commitHead = readObject(COMMIT_HEAD, Commit.class);
-        File fileInStaging = join(STAGING_DIR, fileName, toAddFileSha, fileName);
+        File fileInStaging = join(STAGING_DIR, toAddFileSha, fileName);
         TreeMap<String, String> toAddFileMap;
         if (STAGING_DIR_MAP.exists()) {
             toAddFileMap = readObject(STAGING_DIR_MAP, TreeMap.class);
+
         }
         else {
-            toAddFileMap = new TreeMap<>();
+            toAddFileMap = new TreeMap<String, String>();
         }
         if (commitHead.hasFile(fileName, toAddFileSha)) {
             Utils.restrictedDelete(fileInStaging);
@@ -111,14 +103,14 @@ public class Repository {
         toAddFileMap.entrySet()) {
             commitHead.setFile(set.getKey(), set.getValue());
             /** copy staged file to gitlet object folder  */
-            File toCopyFile = join(STAGING_DIR, set.getKey(), set.getKey(), set.getKey());
+            File toCopyFile = join(STAGING_DIR, set.getValue(), set.getKey());
             byte[] toCopyContent = readContents(toCopyFile);
-            File toCommitFile = join(COMMITTED_FILES_DIR, set.getKey(), set.getValue(), set.getKey());
+            File toCommitFile = join(COMMITTED_FILES_DIR, set.getValue(), set.getKey());
             writeContents(toCommitFile, toCopyContent);
         }
         commitHead = RepositoryHelpers.setCommitHead(commitHead, message);
         TreeMap<String, Commit> commitTree = RepositoryHelpers.readCommitTree();
-        TreeMap<String, String> commitTreeShortened = RepositoryHelpers.readCommitTreeShortened();
+        TreeMap<String, List<String>> commitTreeShortened = RepositoryHelpers.readCommitTreeShortened();
         RepositoryHelpers.writeToCommitTree(commitTree, commitTreeShortened, commitHead);
 
         /** clear staging folder */
@@ -141,6 +133,18 @@ public class Repository {
             RepositoryHelpers.printCommitMessage(commitHead);
         }
         /** TODO: To handle merge node case **/
+    }
+
+    public static void checkout(String filename) {
+        Commit commitHead = RepositoryHelpers.getCommitHead();
+        RepositoryHelpers.checkOutCommand(commitHead, filename);
+        /** TODO: To handle branch **/
+    }
+
+    public static void checkout(String commitId, String filename) {
+        String fullCommitId = RepositoryHelpers.getFullCommitId(commitId);
+        Commit commitHead = RepositoryHelpers.getCommitHead(fullCommitId);
+        RepositoryHelpers.checkOutCommand(commitHead, filename);
     }
 
 

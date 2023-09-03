@@ -14,7 +14,6 @@ public class Main {
      *  <COMMAND> <OPERAND1> <OPERAND2> ... 
      */
     public static void main(String[] args) {
-        // TODO: what if args is empty?
         if (args.length == 0) {
             errorWithExit("Please enter a command.");
         }
@@ -53,7 +52,7 @@ public class Main {
                 // TODO: handle the `status` command
                 break;
             case "checkout":
-                // TODO: handle the `checkout` command
+                validateCheckout(args);
                 break;
             case "branch":
                 // TODO: handle the `branch` command
@@ -89,6 +88,19 @@ public class Main {
             System.exit(0);
         }
         if (args.length > 2) {
+            throw new RuntimeException(
+                    String.format("Incorrect operands."));
+        }
+    }
+
+    public static void validateCheckout(String[] args) {
+        if (args[1].equals("--") && args.length == 3) {
+            Repository.checkout(args[2]);
+        } else if (args[2].equals("--") && args.length == 4) {
+            Repository.checkout(args[1], args[3]);
+        } else if (args.length == 2) {
+            //TODO: handle branch checkout
+        } else {
             throw new RuntimeException(
                     String.format("Incorrect operands."));
         }

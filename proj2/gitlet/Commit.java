@@ -30,13 +30,13 @@ public class Commit implements Serializable {
     public String thisId;
     private String secondParentId;
     private Date timestamp;
-    private Map files;
+    private TreeMap<String, String> files;
 
     public Commit() {
         this.message = "initial commit";
         this.timestamp = new Date(0);
         this.parentId = Repository.INITIAL_COMMIT_ID;
-        this.files = new TreeMap<String, String>();
+        this.files = new TreeMap<String,String>();
     }
 
     public boolean hasFile(String fileName, String sha1) {
@@ -70,4 +70,6 @@ public class Commit implements Serializable {
     public Date getTimestamp() { return this.timestamp; }
 
     public String getMessage() { return this.message; }
+
+    public TreeMap<String, String> getFiles() { return this.files; }
 }
