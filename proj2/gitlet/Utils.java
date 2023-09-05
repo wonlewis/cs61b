@@ -198,6 +198,12 @@ class Utils {
         return Paths.get(first.getPath(), others).toFile();
     }
 
+    static File joinAndCreateFile(File first, String... others) {
+        File file = join(first.getPath(), others);
+        if (!file.exists()) file.mkdirs();
+        return file;
+    }
+
 
     /* SERIALIZATION UTILITIES */
 

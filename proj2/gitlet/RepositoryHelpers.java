@@ -10,7 +10,7 @@ import static gitlet.Utils.*;
 public class RepositoryHelpers {
 
     protected static void writeToCommitTree(Map<String, Commit> commitTree, Map<String, List<String>> commitTreeShortened, Commit commitHead) {
-        String commitSha = Utils.sha1(Utils.serialize(commitHead));
+        String commitSha = sha1(serialize(commitHead));
         commitTree.put(commitSha, commitHead);
         String commitShaPart1 = commitSha.substring(0, 1);
         String commitShaPart2 = commitSha.substring(2, commitSha.length() - 1);
@@ -29,7 +29,7 @@ public class RepositoryHelpers {
     }
 
     protected static Commit setCommitHead(Commit commitHead, String message) {
-        String commitHeadSha = sha1(commitHead);
+        String commitHeadSha = sha1(serialize(commitHead));
         commitHead.setMessage(message);
         commitHead.setParentId(commitHead.thisId);
         commitHead.setThisId(commitHeadSha);
@@ -93,7 +93,7 @@ public class RepositoryHelpers {
 
     protected static String getFullCommitId(String shaShort) {
         String commitId;
-        if (shaShort.length() < 40) {
+        if (shaShort.length() < UID_LENGTH) {
             String commitShaPart1 = shaShort.substring(0, 1);
             String commitShaPart2 = shaShort.substring(0, shaShort.length() - 1);
             TreeMap<String, List<String>> commitTreeShortened = RepositoryHelpers.readCommitTreeShortened();
@@ -127,6 +127,6 @@ public class RepositoryHelpers {
             System.out.println("File does not exist in that commit.");
             System.exit(0);
         }
-        RepositoryHelpers.writeToFileInWorkingDirectory(checkoutFile, filename);
+        writeToFileInWorkingDirectory(checkoutFile, filename);
     }
 }

@@ -61,7 +61,7 @@ public class Repository {
 
 
     public static void add(String fileName) {
-        File toAddFile = join(GITLET_DIR, fileName);
+        File toAddFile = join(CWD, fileName);
         if (!toAddFile.exists()) {
             System.out.println("File does not exist.");
             System.exit(0);
@@ -69,6 +69,7 @@ public class Repository {
         byte[] toAddFileByteArray = readContents(toAddFile);
         String toAddFileSha = sha1(toAddFileByteArray);
         Commit commitHead = readObject(COMMIT_HEAD, Commit.class);
+        joinAndCreateFile(STAGING_DIR, toAddFileSha);
         File fileInStaging = join(STAGING_DIR, toAddFileSha, fileName);
         TreeMap<String, String> toAddFileMap;
         if (STAGING_DIR_MAP.exists()) {
@@ -82,6 +83,8 @@ public class Repository {
             Utils.restrictedDelete(fileInStaging);
         } else if (!toAddFileMap.containsKey(fileName) || toAddFileMap.get(fileName) == null) {
             byte[] toAddFileRead = readContents(toAddFile);
+            System.out.println(toAddFileRead);
+            System.out.println(fileInStaging);
             writeContents(fileInStaging, toAddFileRead);
             toAddFileMap.put(fileName, toAddFileSha);
             writeObject(STAGING_DIR_MAP, toAddFileMap);
@@ -105,6 +108,7 @@ public class Repository {
             /** copy staged file to gitlet object folder  */
             File toCopyFile = join(STAGING_DIR, set.getValue(), set.getKey());
             byte[] toCopyContent = readContents(toCopyFile);
+            joinAndCreateFile(COMMITTED_FILES_DIR, set.getValue());
             File toCommitFile = join(COMMITTED_FILES_DIR, set.getValue(), set.getKey());
             writeContents(toCommitFile, toCopyContent);
         }
@@ -114,7 +118,6 @@ public class Repository {
         RepositoryHelpers.writeToCommitTree(commitTree, commitTreeShortened, commitHead);
 
         /** clear staging folder */
-        Utils.restrictedDelete(STAGING_DIR_MAP);
         try {
             Files.walk(STAGING_DIR.toPath())
                     .sorted(Comparator.reverseOrder())
@@ -128,7 +131,7 @@ public class Repository {
     public static void log() {
         Commit commitHead = RepositoryHelpers.getCommitHead();
         RepositoryHelpers.printCommitMessage(commitHead);
-        while (commitHead.getParentId() != INITIAL_COMMIT_ID) {
+        while (!commitHead.getParentId().equals(INITIAL_COMMIT_ID)) {
             commitHead = RepositoryHelpers.getCommitHead(commitHead.getParentId());
             RepositoryHelpers.printCommitMessage(commitHead);
         }
